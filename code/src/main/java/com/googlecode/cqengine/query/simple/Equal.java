@@ -15,11 +15,11 @@
  */
 package com.googlecode.cqengine.query.simple;
 
+import static com.googlecode.cqengine.query.support.QueryValidation.checkQueryValueNotNull;
+
 import com.googlecode.cqengine.attribute.Attribute;
 import com.googlecode.cqengine.attribute.SimpleAttribute;
 import com.googlecode.cqengine.query.option.QueryOptions;
-
-import static com.googlecode.cqengine.query.support.QueryValidation.checkQueryValueNotNull;
 
 /**
  * Asserts than an attribute equals a certain value.
@@ -28,33 +28,38 @@ import static com.googlecode.cqengine.query.support.QueryValidation.checkQueryVa
  */
 public class Equal<O, A> extends SimpleQuery<O, A> {
 
-    private final A value;
+    private final ValuePlaceHolder<A> value;
 
     public Equal(Attribute<O, A> attribute, A value) {
         super(attribute);
-        this.value = checkQueryValueNotNull(value);
+        this.value = new ValuePlaceHolder<>(checkQueryValueNotNull(value));
+    }
+    
+    public Equal(Attribute<O, A> attribute, ValuePlaceHolder<A> value) {
+        super(attribute);
+        this.value = value; //checkQueryValueNotNull(value);
     }
 
     public A getValue() {
-        return value;
+        return value.getValue();
     }
 
     @Override
     public String toString() {
         return "equal("+ asLiteral(super.getAttributeName()) +
-                ", " + asLiteral(value) +
+                ", " + asLiteral(value.getValue()) +
                 ")";
     }
 
     @Override
     protected boolean matchesSimpleAttribute(SimpleAttribute<O, A> attribute, O object, QueryOptions queryOptions) {
-        return value.equals(attribute.getValue(object, queryOptions));
+        return value.getValue().equals(attribute.getValue(object, queryOptions));
     }
 
     @Override
     protected boolean matchesNonSimpleAttribute(Attribute<O, A> attribute, O object, QueryOptions queryOptions) {
         for (A attributeValue : attribute.getValues(object, queryOptions)) {
-            if (value.equals(attributeValue)) {
+            if (value.getValue().equals(attributeValue)) {
                 return true;
             }
         }
@@ -69,7 +74,7 @@ public class Equal<O, A> extends SimpleQuery<O, A> {
         Equal equal = (Equal) o;
 
         if (!attribute.equals(equal.attribute)) return false;
-        if (!value.equals(equal.value)) return false;
+        if (!value.getValue().equals(equal.value.getValue())) return false;
 
         return true;
     }
@@ -77,7 +82,7 @@ public class Equal<O, A> extends SimpleQuery<O, A> {
     @Override
     protected int calcHashCode() {
         int result = attribute.hashCode();
-        result = 31 * result + value.hashCode();
+        result = 31 * result + value.getValue().hashCode();
         return result;
     }
 }
