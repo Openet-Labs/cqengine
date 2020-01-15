@@ -40,7 +40,7 @@ import com.googlecode.cqengine.query.option.DeduplicationOption;
 import com.googlecode.cqengine.query.option.QueryOptions;
 import com.googlecode.cqengine.query.simple.Equal;
 import com.googlecode.cqengine.query.simple.In;
-import com.googlecode.cqengine.query.simple.LongestPrefix;
+import com.googlecode.cqengine.query.comparative.LongestPrefix;
 import com.googlecode.cqengine.query.simple.StringIsContainedIn;
 import com.googlecode.cqengine.query.simple.StringIsPrefixOf;
 import com.googlecode.cqengine.resultset.ResultSet;
@@ -190,10 +190,7 @@ public class InvertedRadixTreeIndex<A extends CharSequence, O> extends AbstractA
                 @Override
                 public boolean contains(O object) {
                     ResultSet<O> rs = tree.getValueForLongestKeyPrefixing(longestPrefix.getValue());
-                    if(null != rs) {
-                        return rs.contains(object);
-                    }
-                    return false;
+                    return rs != null && rs.contains(object);
                 }
 
                 @Override
@@ -219,19 +216,13 @@ public class InvertedRadixTreeIndex<A extends CharSequence, O> extends AbstractA
                 @Override
                 public int getMergeCost() {
                     ResultSet<O> rs = tree.getValueForLongestKeyPrefixing(longestPrefix.getValue());
-                    if(null != rs) {
-                        return rs.getMergeCost();
-                    }
-                    return 0;
+                    return rs != null ? rs.getMergeCost() : 0;
                 }
 
                 @Override
                 public int size() {
                     ResultSet<O> rs = tree.getValueForLongestKeyPrefixing(longestPrefix.getValue());
-                    if(null != rs) {
-                        return rs.size();
-                    }
-                    return 0;
+                    return rs != null ? rs.size() : 0;
                 }
 
                 @Override
