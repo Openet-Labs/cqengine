@@ -426,4 +426,60 @@
             </build>
         </profile>
     </profiles>
+    <!-- Standard declaration of Openet Modules Repositories -->
+    <repositories>
+        <repository>
+            <id>openet-modules-release-repository</id>
+            <name>Openet Modules Release Repository</name>
+            <url>https://artifactory.openet.com/artifactory/modules-release</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>openet-modules-snapshot-repository</id>
+            <name>Openet Modules Snapshot Repository</name>
+            <url>https://artifactory.openet.com/artifactory/modules-snapshot</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>openet-modules-release-repository</id>
+            <name>Openet Modules Release Repository</name>
+            <url>https://artifactory.openet.com/artifactory/modules-release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>openet-modules-snapshot-repository</id>
+            <name>Openet Modules Snapshot Local Repository</name>
+            <url>https://artifactory.openet.com/artifactory/modules-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
